@@ -102,7 +102,9 @@ class BenchComputer(Frame):
     # listener = pifacerelayplus.InputEventListener(chip=self.pfr)
     # listener.register(0, pifacerelayplus.IODIR_RISING_EDGE, print)
     # listener.activate()
-
+    root.protocol("WM_DELETE_WINDOW", self.on_closing)  # This will create a pop-up to confirm ending the program, and
+                                                        # if there is confirmation it will call the on_closing method
+                                                        # to tidy up before closing.
     self.camera                                 = picamera.PiCamera()
     self.pi                                     = pigpio.pi()
     self.sensor                                 = DHT22.sensor(self.pi, 19, None, 26)
@@ -564,7 +566,6 @@ def main():
   root = Tk()
   root.attributes('-zoomed', True)
   ex = BenchComputer(root)
-  root.protocol("WM_DELETE_WINDOW", ex.on_closing)
   root.after(DHT_FREQUENCY, ex.getDHTreadings)
   root.mainloop()  
 
