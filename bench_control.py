@@ -1,12 +1,72 @@
 #!/usr/bin/python3
+''' FILE NAME
+bench_control.py
+1. WHAT IT DOES
+This is a GUI application that runs on any Raspberry Pi with a 40-pin header. 
+It requires a Piface Realy Plus HAT
+ 
+2. REQUIRES
+* Any Raspberry Pi with a 40-pin header.
+* Piface Realy Plus HAT
+* Rapsberry Pi camera
+* Raspberry Pi 7-inch touch screen
+* Case
 
-# This version of the app is running on Python 3
-# I am adding scheduling so I can take interval still images.
+Optional:
+* A 5mm LED
+* A 5V-10A relay
+* A 220Ohm resistor
+* Jumper wires
 
-# v.8 includes the DHT22 code
+3. ORIGINAL WORK
+Make A Raspberry Pi powered bench computer, Peter Dalmaris
+
+4. HARDWARE
+Connect the required hardware to the Raspberry Pi: touch screen, Piface Relay Plus HAT, camera.
+
+Connect the external devices you wish to control to the relay terminals.
+
+5. SOFTWARE
+* Command line terminal
+* Simple text editor
+* SSH and SCP
+
+Libraries:
+* tkinter (Build in to with both Python3 and Python interpreters that ship with Raspbian)
+* time
+* datetime
+* pifacerelayplus
+* datetime
+* picamera
+* PIL
+* os
+* pigpio 
+* DHT22 (get from http://abyz.co.uk/rpi/pigpio/examples.html#Python_code, place in the same folder as this script)
+* Adafruit_DHT
+
+6. WARNING!
+Be extremely careful if you wish to control mains appliances with your Bench Computer. 
+Seek the help of a licensed electrician. Any relevant information provided in this course is for educational
+purposes only. Tech Explorations and Peter Dalmaris assume no responsibility for any loss of property, personal
+injury or loss of life that results from the application of any information contained in this course.
+
+
+7. CREATED 
+May 2016
+
+8. TYPICAL OUTPUT
+Controls connected devices.
+
+ // 9. COMMENTS
+--
+ // 10. END
+
+ v.9 fixes issues with communication to the DHT sensor failing after a few cycles.
+'''
 
 from    tkinter     import *
 from    tkinter.ttk import *
+from    tkinter import messagebox
 from    time        import sleep, strftime
 import  datetime
 import  pifacerelayplus
@@ -18,8 +78,6 @@ from    PIL         import Image
 import  os
 import  pigpio
 import  DHT22
-
-
 import  Adafruit_DHT
 
 PROGRAM_NAME      = "Tech Explorations Bench Controller"
@@ -46,6 +104,8 @@ class BenchComputer(Frame):
     # listener.activate()
 
     self.camera                                 = picamera.PiCamera()
+    self.pi                                     = pigpio.pi()
+    self.sensor                                 = DHT22.sensor(self.pi, 19, None, 26)
     self.last_photo                             = None    #declaring without defining.
     self.isVideoRecording                       = FALSE
     self.isTakingIntervalPhotos                 = FALSE
@@ -468,20 +528,25 @@ class BenchComputer(Frame):
     # This works ok with Python 3
     DHT_SENSOR_TYPE   = 2302
     DHT_FREQUENCY     = 10000
-    pi      = pigpio.pi()
-    sensor  = DHT22.sensor(pi, 4)
-    sensor.trigger()
-    sleep(.2) # Necessary on faster Raspberry Pi's
+    
+    # sensor  = DHT22.sensor(self.pi, 19, None, 26)
+    # def dht_callback():
+      # nonlocal sensor
+    self.sensor.trigger()
+    sleep(.2) # Necessary on faster Raspberry Pi's BUT I WILL NEED TO FIND A NON-BLOCKING WAY TO DELAY
+              # SLEEP SHOULD NOT BE USED IN A GUI APPLICATION!!!
+
     # To convert Celsius to Farenheit, use this formula: (°C × 9/5) + 32 = °F
-    temperature = sensor.temperature()
-    humidity    = sensor.humidity()
-    sensor.cancel()
-    pi.stop()
+    temperature = self.sensor.temperature()
+    humidity    = self.sensor.humidity()
+    # self.sensor.cancel()
+    #pi.stop()
     self.temperatureLabel.config(     text  =  "{:3.2f}".format(temperature / 1.))
     self.humidityLabel.config(        text  =  "{:3.2f}".format(humidity / 1.))
     self.environmentTimeLabel.config( text  =  datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))           # Prints out to the terminal
     print("{:3.2f}, {:3.2f}".format(temperature / 1., humidity / 1.))   # Prints out to the terminal
+    # print("{:3.2f}, {:3.2f}".format(sensor.temperature() / 1., sensor.humidity() / 1.))
     self.root.after(DHT_FREQUENCY, self.getDHTreadings)
 
   #With this method, I am testing interrupts from the GPIOs (i.e. to deal with a button press)
@@ -489,10 +554,17 @@ class BenchComputer(Frame):
   #   self.log_textBox.insert(0.0, "Light is {}\n".format(event.interrupt_flag))
       # print(event.interrupt_flag)
 
+  def on_closing():
+    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        self.sensor.cancel()
+        self.pi.stop()    # stop the connection to the pigpiod deamon.
+        root.destroy()
+
 def main():
   root = Tk()
   root.attributes('-zoomed', True)
   ex = BenchComputer(root)
+  root.protocol("WM_DELETE_WINDOW", ex.on_closing)
   root.after(DHT_FREQUENCY, ex.getDHTreadings)
   root.mainloop()  
 
