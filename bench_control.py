@@ -102,6 +102,7 @@ class BenchComputer(Frame):
     # listener = pifacerelayplus.InputEventListener(chip=self.pfr)
     # listener.register(0, pifacerelayplus.IODIR_RISING_EDGE, print)
     # listener.activate()
+
     root.protocol("WM_DELETE_WINDOW", self.on_closing)  # This will create a pop-up to confirm ending the program, and
                                                         # if there is confirmation it will call the on_closing method
                                                         # to tidy up before closing.
@@ -117,15 +118,18 @@ class BenchComputer(Frame):
     self.directory_interval                     = None
     self.file_name_interval                     = None 
     self.lightOnImage                           = PhotoImage(file="icons/light-bulb.png")    
-    self.fanImage                               = PhotoImage(file="icons/vehicle.png")
-    self.ironImage                              = PhotoImage(file="icons/tool.png")
-    self.gpioONImage                            = PhotoImage(file="icons/switch-1.png")
+    self.fanImage                               = PhotoImage(file="icons/ac.png")
+    self.ironImage                              = PhotoImage(file="icons/iron-soldering.png")
+    self.gpioONImage                            = PhotoImage(file="icons/switch.png")
     self.gpioOFFImage                           = PhotoImage(file="icons/switch-2.png")
-    self.stillCamera                            = PhotoImage(file="icons/CompactCamera-50.png")
-    self.intervalCamera                         = PhotoImage(file="icons/StackofPhotos-50.png")
-    self.videoCamera                            = PhotoImage(file="icons/VideoCall-50.png")  
-    self.add                                    = PhotoImage(file="icons/add-16.png")         
-    self.remove                                 = PhotoImage(file="icons/remove-16.png")         
+    self.stillCamera                            = PhotoImage(file="icons/photo-camera.png")
+    self.intervalCamera                         = PhotoImage(file="icons/multiple-shots.png")
+    self.videoCamera                            = PhotoImage(file="icons/video-camera.png")  
+    self.add                                    = PhotoImage(file="icons/add.png")         
+    self.remove                                 = PhotoImage(file="icons/minus.png")   
+    self.clock                                  = PhotoImage(file="icons/clock.png") 
+    self.humidity                               = PhotoImage(file="icons/humidity.png")         
+    self.thermometer                            = PhotoImage(file="icons/thermometer.png")           
     self.root                                   = root
     self.root.title(PROGRAM_NAME)
     self.pack(fill=BOTH,expand=True)
@@ -180,12 +184,12 @@ class BenchComputer(Frame):
     buttonStyle                               = Style()
     buttonStyle.configure(  "Normal.TButton", 
                             background        = "#91C497", 
-                            borderwidth       = 3, 
+                            borderwidth       = 1, 
                             activeforeground  = "#30903C", 
                             compound          = "BOTTOM")
     buttonStyle.configure(  "Selected.TButton", 
                             background        = "#107B1D", 
-                            borderwidth       = 3, 
+                            borderwidth       = 1, 
                             activeforeground  = "#30903C", 
                             compound          = "BOTTOM")
     buttonStyle.configure(  "TextOnly.TButton", 
@@ -300,10 +304,11 @@ class BenchComputer(Frame):
                                           text      = "Still",          
                                           command   = self.take_still,  
                                           image     = self.stillCamera,
-                                          style     = "Normal.TButton")    
+                                          style     = "Normal.TButton")   
+
     stillPhotoButton.grid(                row       = 0, 
                                           column    = 0, 
-                                          rowspan   = 2)
+                                          rowspan   = 1)
 
     intervalPhotoButton       = Button(   cameraFrameLeft,           
                                           text      = "Interval",          
@@ -311,9 +316,9 @@ class BenchComputer(Frame):
                                           image     = self.intervalCamera,
                                           style     = "Normal.TButton")    
 
-    intervalPhotoButton.grid(             row       = 2, 
+    intervalPhotoButton.grid(             row       = 1, 
                                           column    = 0,  
-                                          rowspan   = 2)
+                                          rowspan   = 1)
 
     videoButton               = Button(   cameraFrameLeft,           
                                           text      = "Video",          
@@ -342,16 +347,16 @@ class BenchComputer(Frame):
                                           image     = self.remove, 
                                           style     = "Normal.TButton")    
     
-    self.intervalText.grid(               row         = 1,
-                                          column      = 2,
+    self.intervalText.grid(               row         = 0,
+                                          column      = 1,
                                           columnspan  = 2,
-                                          rowspan     = 2)
+                                          rowspan     = 1)
 
-    increaseInterval.grid(                row         = 3,
-                                          column      = 3)
-
-    decreaseInterval.grid(                row         = 3,
+    increaseInterval.grid(                row         = 1,
                                           column      = 2)
+
+    decreaseInterval.grid(                row         = 1,
+                                          column      = 3)
 
     self.cameraStatus         = Label(    cameraFrameLeft, 
                                           text        = "NOT RECORDING", 
@@ -362,11 +367,27 @@ class BenchComputer(Frame):
                                           columnspan  = 2)
 
     #Create the UI in the Environment tab (frame3)
+    temperatureLabel                  = Label(    frame3,                                           
+                                                  image     = self.thermometer)   
+    humidityLabel                     = Label(    frame3,                                           
+                                                  image     = self.humidity)
+    timedateLabel                     = Label(    frame3,                                           
+                                                  image     = self.clock)
+
+    temperatureLabel.grid(                  row        = 0,
+                                            column      = 0)
+
+    humidityLabel.grid(                     row        = 1,
+                                            column      = 0)
+
+    timedateLabel.grid(                     row        = 2,
+                                            column      = 0)
+
     self.environmentTimeLabel         = Label(    frame3, 
                                           text        = datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), 
                                           style       = "EnrironmentTime.TLabel")
     
-    self.environmentTimeLabel.grid(       row         = 5, 
+    self.environmentTimeLabel.grid(       row         = 2, 
                                           column      = 1,  
                                           columnspan  = 5)
     
@@ -378,10 +399,10 @@ class BenchComputer(Frame):
                                           text        = "-", 
                                           style       = "Enrironment.TLabel")
     
-    self.humidityLabel.grid(              row         = 3, 
+    self.humidityLabel.grid(              row         = 1, 
                                           column      = 1)
 
-    self.temperatureLabel.grid(           row         = 2, 
+    self.temperatureLabel.grid(           row         = 0, 
                                           column      = 1)
     
     self.temperatureUnitLabel            = Label(    frame3, 
@@ -392,10 +413,10 @@ class BenchComputer(Frame):
                                           text        = "%", 
                                           style       = "Enrironment.TLabel")
     
-    self.humidityUnitLabel.grid(          row         = 3, 
+    self.humidityUnitLabel.grid(          row         = 1, 
                                           column      = 2)
     
-    self.temperatureUnitLabel.grid(       row         = 2, 
+    self.temperatureUnitLabel.grid(       row         = 0, 
                                           column      = 2)
 
 
@@ -556,11 +577,11 @@ class BenchComputer(Frame):
   #   self.log_textBox.insert(0.0, "Light is {}\n".format(event.interrupt_flag))
       # print(event.interrupt_flag)
 
-  def on_closing():
+  def on_closing(self):
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         self.sensor.cancel()
         self.pi.stop()    # stop the connection to the pigpiod deamon.
-        root.destroy()
+        self.root.destroy()
 
 def main():
   root = Tk()
