@@ -106,6 +106,10 @@ class BenchComputer(Frame):
     root.protocol("WM_DELETE_WINDOW", self.on_closing)  # This will create a pop-up to confirm ending the program, and
                                                         # if there is confirmation it will call the on_closing method
                                                         # to tidy up before closing.
+
+    # self.root.bind("<F11>", self.toggle_fullscreen)
+    # self.root.bind("<Escape>", self.end_fullscreen)
+
     self.camera                                 = picamera.PiCamera()
     self.pi                                     = pigpio.pi()
     self.sensor                                 = DHT22.sensor(self.pi, 19, None, 26)
@@ -583,11 +587,23 @@ class BenchComputer(Frame):
         self.pi.stop()    # stop the connection to the pigpiod deamon.
         self.root.destroy()
 
+  # def toggle_fullscreen(self, event=None):
+  #   self.state = not self.state  # Just toggling the boolean
+  #   self.root.attributes("-fullscreen", self.state)
+  #   return "break"
+
+  # def end_fullscreen(self, event=None):
+  #   self.state = False
+  #   self.root.attributes("-fullscreen", False)
+  #   return "break"
+
 def main():
   root = Tk()
   root.attributes('-zoomed', True)
   ex = BenchComputer(root)
   root.after(DHT_FREQUENCY, ex.getDHTreadings)
+  # root.bind("a", ex.toggle_fullscreen)
+  # root.bind("<Escape>", ex.end_fullscreen)
   root.mainloop()  
 
 if __name__ == '__main__':
