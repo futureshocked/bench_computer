@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 ''' FILE NAME
 bench_control.py
 1. WHAT IT DOES
@@ -32,14 +33,14 @@ Connect the external devices you wish to control to the relay terminals.
 * SSH and SCP
 
 Libraries:
-* tkinter (Build in to with both Python3 and Python interpreters that ship with Raspbian)
-* time
-* datetime
-* pifacerelayplus
+* tkinter (Build-in to with both Python3 and Python interpreters that ship with Raspbian)
+* time    (Build-in)
+* datetime  (Build-in)
+* pifacerelayplus 
 * datetime
 * picamera
-* PIL
-* os
+* PIL and imagetk (sudo apt-get install python3-pil.imagetk)
+* os              (Build-in)
 * pigpio 
 * DHT22 (get from http://abyz.co.uk/rpi/pigpio/examples.html#Python_code, place in the same folder as this script)
 * Adafruit_DHT
@@ -64,26 +65,35 @@ Controls connected devices.
  v.9 fixes issues with communication to the DHT sensor failing after a few cycles.
 '''
 
+
 from    tkinter     import *
 from    tkinter.ttk import *
-from    tkinter import messagebox
-from    time        import sleep, strftime
-import  datetime
+from    tkinter     import messagebox
+
+# Used with the bench control functions
 import  pifacerelayplus
-import  datetime
+
+# Used with the camera functions
 import  picamera
 import  PIL
 from    PIL         import ImageTk
 from    PIL         import Image
+import  datetime                      # used to create a unique file name for each image
 import  os
+
+# Used with the environment functions
 import  pigpio
 import  DHT22
 import  Adafruit_DHT
+from    time        import sleep, strftime
 
-PROGRAM_NAME      = "Tech Explorations Bench Controller"
-DHT_SENSOR_PIN    = 4
-DHT_SENSOR_TYPE   = 2302
-DHT_FREQUENCY     = 10000
+PROGRAM_NAME          = "Tech Explorations Bench Controller"
+IMAGE_FILE_LOCATION   = "../photos"
+VIDEO_FILE_LOCATION   = "../videos"
+DHT_SENSOR_PIN        = 4
+DHT_SENSOR_TYPE       = 2302
+DHT_FREQUENCY         = 10000
+
 
 class BenchComputer(Frame):
 
@@ -95,24 +105,22 @@ class BenchComputer(Frame):
                               'direction':  0, 
                               'pullup':     0}, 
                           {   'value':      0, 
-                              'direction':  0, #Makes X3 an input, and the rest outputs
-                              'pullup':     0})  #makes GPIOs outputs
-
-    #Setup the interrupt for the button connected to X3 (GPIO 0)
-    # listener = pifacerelayplus.InputEventListener(chip=self.pfr)
-    # listener.register(0, pifacerelayplus.IODIR_RISING_EDGE, print)
-    # listener.activate()
+                              'direction':  0,    # Makes all pins outputs outputs
+                              'pullup':     0})   
 
     root.protocol("WM_DELETE_WINDOW", self.on_closing)  # This will create a pop-up to confirm ending the program, and
                                                         # if there is confirmation it will call the on_closing method
                                                         # to tidy up before closing.
+    # Bench control, Tab 1, variables
+    self.lightOnImage                           = PhotoImage(file="icons/light-bulb.png")    
+    self.fanImage                               = PhotoImage(file="icons/ac.png")
+    self.ironImage                              = PhotoImage(file="icons/iron-soldering.png")
+    self.gpioONImage                            = PhotoImage(file="icons/switch.png")
+    self.gpioOFFImage                           = PhotoImage(file="icons/switch-2.png")
+    self.hairdryerImage                         = PhotoImage(file="icons/hairdryer.png")                                                        
 
-    # self.root.bind("<F11>", self.toggle_fullscreen)
-    # self.root.bind("<Escape>", self.end_fullscreen)
-
-    self.camera                                 = picamera.PiCamera()
-    self.pi                                     = pigpio.pi()
-    self.sensor                                 = DHT22.sensor(self.pi, 19, None, 26)
+    # Camera, Tab 2 variables
+    self.camera                                 = picamera.PiCamera()    
     self.last_photo                             = None    #declaring without defining.
     self.isVideoRecording                       = FALSE
     self.isTakingIntervalPhotos                 = FALSE
@@ -121,22 +129,24 @@ class BenchComputer(Frame):
     self.photoInterval                          = 5     # interval in seconds.
     self.directory_interval                     = None
     self.file_name_interval                     = None 
-    self.lightOnImage                           = PhotoImage(file="icons/light-bulb.png")    
-    self.fanImage                               = PhotoImage(file="icons/ac.png")
-    self.ironImage                              = PhotoImage(file="icons/iron-soldering.png")
-    self.gpioONImage                            = PhotoImage(file="icons/switch.png")
-    self.gpioOFFImage                           = PhotoImage(file="icons/switch-2.png")
-    self.stillCamera                            = PhotoImage(file="icons/photo-camera.png")
     self.intervalCamera                         = PhotoImage(file="icons/multiple-shots.png")
     self.videoCamera                            = PhotoImage(file="icons/video-camera.png")  
     self.add                                    = PhotoImage(file="icons/add.png")         
-    self.remove                                 = PhotoImage(file="icons/minus.png")   
+    self.remove                                 = PhotoImage(file="icons/minus.png") 
+    self.stillCamera                            = PhotoImage(file="icons/photo-camera.png")  
+
+    # Environment, Tab 3 variables
+    self.pi                                     = pigpio.pi()
+    self.sensor                                 = DHT22.sensor(self.pi, DHT_SENSOR_PIN)
     self.clock                                  = PhotoImage(file="icons/clock.png") 
     self.humidity                               = PhotoImage(file="icons/humidity.png")         
     self.thermometer                            = PhotoImage(file="icons/thermometer.png")           
-    self.root                                   = root
-    self.root.title(PROGRAM_NAME)
+
+
+
     self.pack(fill=BOTH,expand=True)
+    self.root = root
+    self.root.title(PROGRAM_NAME)
     self.initUI()
 
   def initUI(self):
@@ -170,7 +180,8 @@ class BenchComputer(Frame):
     # frame2 = Frame(width=400, height=300, style='Tab2.TFrame')
     # frame3 = Frame(width=400, height=300, style='Tab3.TFrame')
     ##############################################################
-    
+
+    # Create the notebook UI
     notebook  = Notebook(  self,
                           height  = self.root.winfo_height(),
                           width   = self.root.winfo_width()-150,
@@ -183,6 +194,20 @@ class BenchComputer(Frame):
     notebook.add(frame2,text  = "Camera") 
     notebook.add(frame3,text  = "Environment") 
     notebook.pack(pady = 5, side = LEFT)
+
+    
+
+    #Create the log text area    
+    log_label                                     = Label(self,text="Log")
+    log_label.configure(  background              = "white", 
+                          width                   = 150, 
+                          justify                 = CENTER, 
+                          font                    = ("Helvetica", 14))
+    log_label.pack(       side                    = TOP)
+    self.log_textBox    = Text( self,             
+                                height  = self.root.winfo_height(),               
+                                width   = 150)
+    self.log_textBox.pack(      side    = RIGHT)
 
     #Styles
     buttonStyle                               = Style()
@@ -203,6 +228,8 @@ class BenchComputer(Frame):
                             padding           = (0, 0, 0, 0), 
                             width             = 3, 
                             height            = 3)
+    
+    #Styles for the camera and environment tabs
     intervalLabelStyle                        = Style()
     intervalLabelStyle.configure(     "IntervalLabel.TLabel",
                                       font        = ('Helvetica', '18'),
@@ -223,22 +250,11 @@ class BenchComputer(Frame):
                                       padding     = (0, 0, 0, 0), 
                                       justify     = LEFT)
 
-    #Create the log text area    
-    log_label                                     = Label(self,text="Log")
-    log_label.configure(  background              = "white", 
-                          width                   = 150, 
-                          justify                 = CENTER, 
-                          font                    = ("Helvetica", 14))
-    log_label.pack(       side                    = TOP)
-    self.log_textBox    = Text( self,             
-                                height  = self.root.winfo_height(),               
-                                width   = 150)
-    self.log_textBox.pack(      side    = RIGHT)
-
-    #create the buttons in the Instruments tab (frame1)
+    # Create the UI in the Instruments tab (frame1)
     Style().configure(          "TButton", 
                                 padding   = (30, 30, 30, 30), 
                                 font      = 'serif 10')  # Applies to all buttons
+    
     frame1.columnconfigure(     0, pad    = 3)
     frame1.columnconfigure(     1, pad    = 3)
     frame1.columnconfigure(     2, pad    = 3)
@@ -261,34 +277,34 @@ class BenchComputer(Frame):
                                       column    = 1)
     self.solder_button    = Button(   frame1,           
                                       text      = "solder",            
-                                      command   = self.toggleFan,  
+                                      command   = self.bigRelay1,  
                                       image     = self.ironImage,
                                       style     = "Normal.TButton")    
     self.solder_button.grid(          row       = 0, 
                                       column    = 2)
-    self.io1_button       = Button(   frame1,           
-                                      text      = "GPIO 1",            
-                                      command   = self.bigRelay1,  
-                                      image     = self.gpioONImage,
+    self.hotairgun_button = Button(   frame1,           
+                                      text      = "Hot air gun",            
+                                      command   = self.bigRelay2,  
+                                      image     = self.hairdryerImage,
                                       style     = "Normal.TButton")    
-    self.io1_button.grid(             row       = 1, 
+    self.hotairgun_button.grid(       row       = 1, 
                                       column    = 0)
     self.io2_button       = Button(   frame1,           
                                       text      = "GPIO 2",            
-                                      command   = self.bigRelay2,  
+                                      # command   = self.bigRelay2,  
                                       image     = self.gpioONImage,
                                       style     = "Normal.TButton")    
     self.io2_button.grid(             row       = 1, 
                                       column    = 1)
     self.io3_button       = Button(   frame1,           
                                       text      = "GPIO 3",            
-                                      command   = self.relay1Toggle,  
+                                      # command   = self.relay1Toggle,  
                                       image     = self.gpioONImage,
                                       style     = "Normal.TButton")
     self.io3_button.grid(             row       = 1, 
                                       column    = 2)
 
-    #Create the UI in the Camera tab (frame2)
+    # Create the UI in the Camera tab (frame2)
     cameraFrameLeft       = Frame(    frame2, 
                                       height    = self.root.winfo_height(),
                                       width     = 150, 
@@ -370,7 +386,7 @@ class BenchComputer(Frame):
                                           column      = 2,
                                           columnspan  = 2)
 
-    #Create the UI in the Environment tab (frame3)
+    # Create the UI in the Environment tab (frame3)
     temperatureLabel                  = Label(    frame3,                                           
                                                   image     = self.thermometer)   
     humidityLabel                     = Label(    frame3,                                           
@@ -378,13 +394,13 @@ class BenchComputer(Frame):
     timedateLabel                     = Label(    frame3,                                           
                                                   image     = self.clock)
 
-    temperatureLabel.grid(                  row        = 0,
+    temperatureLabel.grid(                  row         = 0,
                                             column      = 0)
 
-    humidityLabel.grid(                     row        = 1,
+    humidityLabel.grid(                     row         = 1,
                                             column      = 0)
 
-    timedateLabel.grid(                     row        = 2,
+    timedateLabel.grid(                     row         = 2,
                                             column      = 0)
 
     self.environmentTimeLabel         = Label(    frame3, 
@@ -422,9 +438,29 @@ class BenchComputer(Frame):
     
     self.temperatureUnitLabel.grid(       row         = 0, 
                                           column      = 2)
+  # Environment - Tab 3 - methods
+  def getDHTreadings(self):
+    # Here is how to implement the sensor so that SUDO is not required
+    # http://www.rototron.info/dht22-tutorial-for-raspberry-pi/
+    # This works ok with Python 3
 
+    self.sensor.trigger()
+    sleep(.2) # Necessary on faster Raspberry Pi's BUT I WILL NEED TO FIND A NON-BLOCKING WAY TO DELAY
+              # SLEEP SHOULD NOT BE USED IN A GUI APPLICATION!!!
 
+    # To convert Celsius to Farenheit, use this formula: (°C × 9/5) + 32 = °F
+    temperature = self.sensor.temperature()
+    humidity    = self.sensor.humidity()
 
+    self.temperatureLabel.config(     text  =  "{:3.2f}".format(temperature / 1.))
+    self.humidityLabel.config(        text  =  "{:3.2f}".format(humidity / 1.))
+    self.environmentTimeLabel.config( text  =  datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+    print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))           # Prints out to the terminal
+    print("{:3.2f}, {:3.2f}".format(temperature / 1., humidity / 1.))   # Prints out to the terminal
+
+    self.root.after(DHT_FREQUENCY, self.getDHTreadings)
+  
+  # Camera - Tab 2 - methods
   def startIntervalStill(self):
     if self.intervalStillButtonPressed == FALSE:
       self.intervalStillButtonPressed   = TRUE
@@ -444,7 +480,8 @@ class BenchComputer(Frame):
     #root "after" method, at the set interval, unless the user has cancelled the 
     #interval photo function by pressing the button again.
     if self.isTakingIntervalPhotos == FALSE and self.intervalStillButtonPressed   == TRUE:
-      self.directory_interval       = '../photos/Interval_{}'.format(datetime.datetime.now().strftime("%B_%d_%y_%H_%M_%S"))  
+      self.directory_interval       = '{}/Interval_{}'.format(IMAGE_FILE_LOCATION, datetime.datetime.now().strftime("%B_%d_%y_%H_%M_%S"))  
+      #self.directory_interval       = '../photos/Interval_{}'.format(datetime.datetime.now().strftime("%B_%d_%y_%H_%M_%S"))  
       if not os.path.exists(self.directory_interval):
         os.makedirs(self.directory_interval)
         self.file_name_interval     = '{}/{}.jpg'.format(self.directory_interval,self.intervalImageCounter)  
@@ -472,7 +509,7 @@ class BenchComputer(Frame):
   def toggleVideo(self):
     if self.isVideoRecording  == FALSE:
       self.isVideoRecording   = TRUE      
-      file_name               = '../videos/{}.h264'.format(datetime.datetime.now().strftime("%B_%d_%y_%H_%M_%S"))
+      file_name               = '{}/{}.h264'.format(VIDEO_FILE_LOCATION,datetime.datetime.now().strftime("%B_%d_%y_%H_%M_%S"))
       self.log_textBox.insert(0.0, "Video is recording: {}\n".format(file_name))
       self.camera.start_recording(file_name)
       self.cameraStatus.config(text="RECORDING...");
@@ -495,7 +532,7 @@ class BenchComputer(Frame):
 
   def take_still(self):
     self.log_textBox.insert(0.0, "Capturing image...\n")
-    file_name = '../photos/{}.jpg'.format(datetime.datetime.now().strftime("%B_%d_%y_%H_%M_%S"))
+    file_name = '{}/{}.jpg'.format(IMAGE_FILE_LOCATION,datetime.datetime.now().strftime("%B_%d_%y_%H_%M_%S"))
     self.camera.capture(file_name)
     self.log_textBox.insert(0.0, "Captured image {}\n".format(file_name))
 
@@ -503,25 +540,26 @@ class BenchComputer(Frame):
     image           = image.resize((360, 216), Image.ANTIALIAS) 
     self.last_photo = ImageTk.PhotoImage(image)
     Label(self.cameraFrameRight, image=self.last_photo).grid(row=0, column=0)
-    
+
+  # Bench control - Tab 1 - methods
   def bigRelay1(self):
     self.pfr.x_pins[2].toggle()
     if self.pfr.x_pins[2].value == 0:
       relay_value = "ON"  
-      self.io1_button.config(image=self.gpioONImage,style="Selected.TButton")
+      self.solder_button.config(image=self.ironImage,style="Selected.TButton")
     else: 
       relay_value = "OFF"
-      self.io1_button.config(image=self.gpioONImage,style="Normal.TButton")
+      self.solder_button.config(image=self.ironImage,style="Normal.TButton")
     self.log_textBox.insert(0.0, "BigRelay1 is {}\n".format(relay_value))
 
   def bigRelay2(self):
     self.pfr.x_pins[3].toggle()
     if self.pfr.x_pins[3].value == 0:
       relay_value = "ON"  
-      self.io2_button.config(image=self.gpioONImage,style="Selected.TButton")
+      self.hotairgun_button.config(image=self.hairdryerImage,style="Selected.TButton")
     else: 
       relay_value = "OFF"
-      self.io2_button.config(image=self.gpioONImage,style="Normal.TButton")
+      self.hotairgun_button.config(image=self.hairdryerImage,style="Normal.TButton")
     self.log_textBox.insert(0.0, "BigRelay0 is {}\n".format(relay_value))
 
   def toggleFan(self):
@@ -548,62 +586,21 @@ class BenchComputer(Frame):
 
     self.log_textBox.insert(0.0, "Light is {}\n".format(relay_value))
 
-
-  def getDHTreadings(self):
-    # Here is how to implement the sensor so that SUDO is not required
-    # http://www.rototron.info/dht22-tutorial-for-raspberry-pi/
-    # This works ok with Python 3
-    DHT_SENSOR_TYPE   = 2302
-    DHT_FREQUENCY     = 10000
-    
-    # sensor  = DHT22.sensor(self.pi, 19, None, 26)
-    # def dht_callback():
-      # nonlocal sensor
-    self.sensor.trigger()
-    sleep(.2) # Necessary on faster Raspberry Pi's BUT I WILL NEED TO FIND A NON-BLOCKING WAY TO DELAY
-              # SLEEP SHOULD NOT BE USED IN A GUI APPLICATION!!!
-
-    # To convert Celsius to Farenheit, use this formula: (°C × 9/5) + 32 = °F
-    temperature = self.sensor.temperature()
-    humidity    = self.sensor.humidity()
-    # self.sensor.cancel()
-    #pi.stop()
-    self.temperatureLabel.config(     text  =  "{:3.2f}".format(temperature / 1.))
-    self.humidityLabel.config(        text  =  "{:3.2f}".format(humidity / 1.))
-    self.environmentTimeLabel.config( text  =  datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-    print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))           # Prints out to the terminal
-    print("{:3.2f}, {:3.2f}".format(temperature / 1., humidity / 1.))   # Prints out to the terminal
-    # print("{:3.2f}, {:3.2f}".format(sensor.temperature() / 1., sensor.humidity() / 1.))
-    self.root.after(DHT_FREQUENCY, self.getDHTreadings)
-
-  #With this method, I am testing interrupts from the GPIOs (i.e. to deal with a button press)
-  # def print_flag(self,event):
-  #   self.log_textBox.insert(0.0, "Light is {}\n".format(event.interrupt_flag))
-      # print(event.interrupt_flag)
-
   def on_closing(self):
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
-        self.sensor.cancel()
-        self.pi.stop()    # stop the connection to the pigpiod deamon.
+        self.pfr.init_board(  {   'value':      0, 
+                              'direction':  0, 
+                              'pullup':     0}, 
+                          {   'value':      0, 
+                              'direction':  0,    # Makes all pins outputs outputs
+                              'pullup':     0})
         self.root.destroy()
-
-  # def toggle_fullscreen(self, event=None):
-  #   self.state = not self.state  # Just toggling the boolean
-  #   self.root.attributes("-fullscreen", self.state)
-  #   return "break"
-
-  # def end_fullscreen(self, event=None):
-  #   self.state = False
-  #   self.root.attributes("-fullscreen", False)
-  #   return "break"
 
 def main():
   root = Tk()
   root.attributes('-zoomed', True)
   ex = BenchComputer(root)
-  root.after(DHT_FREQUENCY, ex.getDHTreadings)
-  # root.bind("a", ex.toggle_fullscreen)
-  # root.bind("<Escape>", ex.end_fullscreen)
+  root.after(DHT_FREQUENCY, ex.getDHTreadings) #This will trigger the first sensor reading
   root.mainloop()  
 
 if __name__ == '__main__':
