@@ -1,4 +1,6 @@
 # Python 2 example Hello World
+# A place to start with Python 2 and Tkinter (we use Python 3 in the course)
+# Written by Peter Dalmaris, feel free to use and share
 
 from Tkinter import *
 

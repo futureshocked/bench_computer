@@ -1,4 +1,6 @@
 # Python 3 example Hello World
+# A place to start with Python 3 and Tkinter
+# Written by Peter Dalmaris, feel free to use and share
 
 from tkinter import *
 

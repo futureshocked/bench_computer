@@ -1,4 +1,7 @@
 # Python 3 example Hello World v2
+# Add a label...
+# Written by Peter Dalmaris, feel free to use and share
+
 
 from tkinter import *
 

@@ -1,5 +1,6 @@
 # Python 3 example Hello World v8
 # This example demonstrates a basic use of the Grip layout manager
+# Written by Peter Dalmaris, feel free to use and share
 
 from tkinter import *
 from tkinter.ttk import *

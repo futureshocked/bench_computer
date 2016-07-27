@@ -1,4 +1,6 @@
 # Python 3 example Hello World v4
+# ... add a text input box ("Entry") and an change event handler.
+# Written by Peter Dalmaris, feel free to use and share
 
 from tkinter import *
 

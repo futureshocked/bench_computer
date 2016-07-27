@@ -1,5 +1,6 @@
 # Python 3 example Hello World v3
-
+# ... add a label, and an button-click event handler
+# Written by Peter Dalmaris, feel free to use and share
 from tkinter import *
 
 class HelloWorld:

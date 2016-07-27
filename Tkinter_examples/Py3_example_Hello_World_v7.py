@@ -1,4 +1,6 @@
 # Python 3 example Hello World v7
+# Shows how to use the Notebook widget
+# Written by Peter Dalmaris, feel free to use and share
 
 from tkinter import *
 from tkinter.ttk import *

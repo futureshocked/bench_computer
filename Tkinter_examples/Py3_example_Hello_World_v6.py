@@ -1,4 +1,6 @@
 # Python 3 example Hello World v6
+# Shows how to customise widget style
+# Written by Peter Dalmaris, feel free to use and share
 
 from tkinter import *
 from tkinter.ttk import *

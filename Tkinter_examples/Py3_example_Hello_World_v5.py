@@ -1,4 +1,6 @@
 # Python 3 example Hello World v5
+# ... add a button that uses an image label instead of text
+# Written by Peter Dalmaris, feel free to use and share
 
 from tkinter import *
 
