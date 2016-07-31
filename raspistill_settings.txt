@@ -1,0 +1,15 @@
+# Raspistill settings
+
+# Use example:
+
+$ raspistill -o cam.jpg
+
+Available switches:
+
+•	-vf:  vertical flip
+•	-hf: horizontal flip
+•	-w: Set image width <size>
+•	-h: Set image height <size>
+•	-q: Set jpeg quality <0 to 100>
+•	-r: Add raw bayer data to jpeg metadata
+•	-o: Output filename <filename>
