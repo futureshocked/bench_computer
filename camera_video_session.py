@@ -13,3 +13,12 @@ cam.stop_recording()                # Stops the video recording
 # To convert a H264 video file to MP4, install and use the MP4Box utility (on the command line again)
 # Install:
 # sudo apt-get install gpac
+# Convert the h264 file into MP4
+# MP4Box -add video_1.h264 video_1.mp4    
+
+# Play the new mp4 file with omxplayer
+# omxplayer video_1.mp4
+# The "blank" switch will hide the desktop while playing back
+# omxplayer --blank video_1.mp4
+
+
