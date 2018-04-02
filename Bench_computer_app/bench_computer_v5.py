@@ -308,12 +308,12 @@ class BenchComputer(Frame):
                                       column    = 2)
 
     # Create the UI in the Camera tab (frame2)
-    cameraFrameLeft       = Frame(    frame2, 
+    self.cameraFrameLeft  = Frame(    frame2, 
                                       height    = self.root.winfo_height(),
                                       width     = 150, 
                                       relief    = SUNKEN)
     
-    cameraFrameLeft.pack(             pady      = 1,
+    self.cameraFrameLeft.pack(        pady      = 1,
                                       side      = LEFT)
     
     self.cameraFrameRight = Frame(    frame2, 
@@ -323,7 +323,7 @@ class BenchComputer(Frame):
     self.cameraFrameRight.pack(       pady      = 1,
                                       side      = RIGHT)
 
-    stillPhotoButton          = Button(   cameraFrameLeft,           
+    stillPhotoButton          = Button(   self.cameraFrameLeft,           
                                           text      = "Still",          
                                           command   = self.take_still,  
                                           image     = self.stillCamera,
@@ -333,7 +333,7 @@ class BenchComputer(Frame):
                                           column    = 0, 
                                           rowspan   = 1)
 
-    intervalPhotoButton       = Button(   cameraFrameLeft,           
+    intervalPhotoButton       = Button(   self.cameraFrameLeft,           
                                           text      = "Interval",          
                                           command   = self.startIntervalStill,  
                                           image     = self.intervalCamera,
@@ -343,7 +343,7 @@ class BenchComputer(Frame):
                                           column    = 0,  
                                           rowspan   = 1)
 
-    videoButton               = Button(   cameraFrameLeft,           
+    videoButton               = Button(   self.cameraFrameLeft,           
                                           text      = "Video",          
                                           command   = self.toggleVideo,  
                                           image     = self.videoCamera,
@@ -354,17 +354,17 @@ class BenchComputer(Frame):
                                           rowspan   = 2)
 
 
-    self.intervalText         = Label(    cameraFrameLeft, 
+    self.intervalText         = Label(    self.cameraFrameLeft, 
                                           text      = "Interval: {}s\n".format(self.photoInterval), 
                                           style     = "IntervalLabel.TLabel")    
 
-    increaseInterval          = Button(   cameraFrameLeft, 
+    increaseInterval          = Button(   self.cameraFrameLeft, 
                                           text      = "Increase", 
                                           command   = self.increase_photo_interval, 
                                           image     = self.add, 
                                           style     = "Normal.TButton")
 
-    decreaseInterval          = Button(   cameraFrameLeft, 
+    decreaseInterval          = Button(   self.cameraFrameLeft, 
                                           text      = "Decrease", 
                                           command   = self.decrease_photo_interval, 
                                           image     = self.remove, 
@@ -381,7 +381,7 @@ class BenchComputer(Frame):
     decreaseInterval.grid(                row         = 1,
                                           column      = 3)
 
-    self.cameraStatus         = Label(    cameraFrameLeft, 
+    self.cameraStatus         = Label(    self.cameraFrameLeft, 
                                           text        = "NOT RECORDING", 
                                           style       = "cameraInfoLabel.TLabel")
 
