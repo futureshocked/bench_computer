@@ -90,7 +90,7 @@ class BenchComputer(Frame):
     # Create the notebook UI
     notebook  = Notebook(  self,
                           height  = self.root.winfo_height(),
-                          width   = self.root.winfo_width()-150))
+                          width   = self.root.winfo_width()-150)
     frame1    = Frame() 
     frame2    = Frame() 
     frame3    = Frame()
