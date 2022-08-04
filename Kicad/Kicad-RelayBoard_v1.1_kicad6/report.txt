@@ -1,0 +1,23 @@
+Info: Backing up file '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/sym-lib-table' to '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/rescue-backup/sym-lib-table-2022-08-04-12-34-42'.
+Info: Backing up file '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/BenchComputerRelayDriver.sch' to '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/rescue-backup/BenchComputerRelayDriver-2022-08-04-12-34-42.sch'.
+Info: Backing up file '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/BenchComputerRelayDriver.kicad_pro' to '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/rescue-backup/BenchComputerRelayDriver-2022-08-04-12-34-42.kicad_pro'.
+Info: Backing up file '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/BenchComputerRelayDriver-cache.lib' to '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/rescue-backup/BenchComputerRelayDriver-cache-2022-08-04-12-34-42.lib'.
+Info: Backing up file '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/BenchComputerRelayDriver-rescue.lib' to '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/rescue-backup/BenchComputerRelayDriver-rescue-2022-08-04-12-34-42.lib'.
+Info: Backing up file '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/BenchComputerRelayDriver-rescue.dcm' to '/Users/peter/Downloads/bench_computer-master/Kicad V6/Kicad-RelayBoard_v1.1/rescue-backup/BenchComputerRelayDriver-rescue-2022-08-04-12-34-42.dcm'.
+Info: Adding library 'BenchComputerRelayDriver-rescue', file '${KIPRJMOD}/BenchComputerRelayDriver-rescue.lib' to project symbol library table.
+Info: Adding library 'songle_5v_relay', file '${KIPRJMOD}/songle_5v_relay.lib' to project symbol library table.
+Symbol R mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol R mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol PWR_FLAG mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol GND mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol GND mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol CONN_01X02 mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol Q_NPN_BCE mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol SONGLE_5V_relay mapped to symbol library 'songle_5v_relay'.
+Symbol CONN_01X02 mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol GND mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol D mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Symbol CONN_01X03 mapped to symbol library 'BenchComputerRelayDriver-rescue'.
+Info: Symbol library table mapping complete!
+Info: Created project symbol library table.
+

@@ -1,0 +1,238 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:songle_5v_relay
+LIBS:BenchComputerRelayDriver-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Q_NPN_BCE Q1
+U 1 1 57438641
+P 5750 4400
+F 0 "Q1" H 6050 4450 50  0000 R CNN
+F 1 "Q_NPN_BCE" H 6350 4350 50  0000 R CNN
+F 2 "TO_SOT_Packages_THT:TO-92_Molded_Wide_Oval" H 5950 4500 50  0001 C CNN
+F 3 "" H 5750 4400 50  0000 C CNN
+	1    5750 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R1
+U 1 1 57438682
+P 4950 4400
+F 0 "R1" V 5030 4400 50  0000 C CNN
+F 1 "R" V 4950 4400 50  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4880 4400 50  0001 C CNN
+F 3 "" H 4950 4400 50  0000 C CNN
+	1    4950 4400
+	0    1    1    0   
+$EndComp
+$Comp
+L R R2
+U 1 1 5743870B
+P 5450 4750
+F 0 "R2" V 5530 4750 50  0000 C CNN
+F 1 "R" V 5450 4750 50  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 5380 4750 50  0001 C CNN
+F 3 "" H 5450 4750 50  0000 C CNN
+	1    5450 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L D D1
+U 1 1 57438746
+P 5850 3650
+F 0 "D1" H 5850 3750 50  0000 C CNN
+F 1 "D" H 5850 3550 50  0000 C CNN
+F 2 "Diodes_ThroughHole:Diode_DO-41_SOD81_Horizontal_RM10" H 5850 3650 50  0001 C CNN
+F 3 "" H 5850 3650 50  0000 C CNN
+	1    5850 3650
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5100 4400 5550 4400
+Wire Wire Line
+	5450 4600 5450 4400
+Connection ~ 5450 4400
+$Comp
+L GND #PWR01
+U 1 1 57438852
+P 5450 5200
+F 0 "#PWR01" H 5450 4950 50  0001 C CNN
+F 1 "GND" H 5450 5050 50  0000 C CNN
+F 2 "" H 5450 5200 50  0000 C CNN
+F 3 "" H 5450 5200 50  0000 C CNN
+	1    5450 5200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5450 4900 5450 5200
+Wire Wire Line
+	4400 4400 4800 4400
+Wire Wire Line
+	5850 3800 5850 4200
+Wire Wire Line
+	5850 5050 5850 4600
+Connection ~ 5450 5050
+$Comp
+L CONN_01X02 P1
+U 1 1 574389C5
+P 4200 4450
+F 0 "P1" H 4200 4600 50  0000 C CNN
+F 1 "CONN_01X02" V 4300 4450 50  0000 C CNN
+F 2 "Connect:bornier2" H 4200 4450 50  0001 C CNN
+F 3 "" H 4200 4450 50  0000 C CNN
+	1    4200 4450
+	-1   0    0    1   
+$EndComp
+Text Label 4400 4400 0    60   ~ 0
+signal_in
+Wire Wire Line
+	5850 3950 6000 3950
+Wire Wire Line
+	6000 3950 6000 3750
+Wire Wire Line
+	6000 3750 6250 3750
+Connection ~ 5850 3950
+$Comp
+L CONN_01X02 P2
+U 1 1 5743A843
+P 5800 2750
+F 0 "P2" H 5800 2900 50  0000 C CNN
+F 1 "CONN_01X02" V 5900 2750 50  0000 C CNN
+F 2 "Connect:bornier2" H 5800 2750 50  0001 C CNN
+F 3 "" H 5800 2750 50  0000 C CNN
+	1    5800 2750
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR02
+U 1 1 5743ABD8
+P 4600 5200
+F 0 "#PWR02" H 4600 4950 50  0001 C CNN
+F 1 "GND" H 4600 5050 50  0000 C CNN
+F 2 "" H 4600 5200 50  0000 C CNN
+F 3 "" H 4600 5200 50  0000 C CNN
+	1    4600 5200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4400 4500 4600 4500
+Wire Wire Line
+	4600 4500 4600 5200
+Wire Wire Line
+	5850 5050 5450 5050
+$Comp
+L GND #PWR03
+U 1 1 5743AD94
+P 5200 3150
+F 0 "#PWR03" H 5200 2900 50  0001 C CNN
+F 1 "GND" H 5200 3000 50  0000 C CNN
+F 2 "" H 5200 3150 50  0000 C CNN
+F 3 "" H 5200 3150 50  0000 C CNN
+	1    5200 3150
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5750 2950 5750 3150
+Wire Wire Line
+	5750 3150 5200 3150
+Wire Wire Line
+	5850 2950 5850 3500
+Wire Wire Line
+	6150 3500 6150 3250
+Wire Wire Line
+	6150 3250 5850 3250
+Connection ~ 5850 3250
+$Comp
+L PWR_FLAG #FLG04
+U 1 1 5743BAF9
+P 4700 4950
+F 0 "#FLG04" H 4700 5045 50  0001 C CNN
+F 1 "PWR_FLAG" H 4700 5130 50  0000 C CNN
+F 2 "" H 4700 4950 50  0000 C CNN
+F 3 "" H 4700 4950 50  0000 C CNN
+	1    4700 4950
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4700 4950 4600 4950
+Connection ~ 4600 4950
+$Comp
+L SONGLE_5V_relay U1
+U 1 1 5743C2E5
+P 6800 3650
+F 0 "U1" H 6800 4000 60  0000 C CNN
+F 1 "SONGLE_5V_relay" H 6800 3350 60  0000 C CNN
+F 2 "" H 6950 3650 60  0001 C CNN
+F 3 "" H 6950 3650 60  0000 C CNN
+	1    6800 3650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6250 3500 6150 3500
+$Comp
+L CONN_01X03 P3
+U 1 1 5743C38F
+P 7800 3650
+F 0 "P3" H 7800 3850 50  0000 C CNN
+F 1 "CONN_01X03" V 7900 3650 50  0000 C CNN
+F 2 "Connect:bornier3" H 7800 3650 50  0001 C CNN
+F 3 "" H 7800 3650 50  0000 C CNN
+	1    7800 3650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7600 3550 7500 3550
+Wire Wire Line
+	7500 3550 7500 3500
+Wire Wire Line
+	7500 3500 7350 3500
+Wire Wire Line
+	7600 3750 7500 3750
+Wire Wire Line
+	7500 3750 7500 3800
+Wire Wire Line
+	7500 3800 7350 3800
+Wire Wire Line
+	7350 3650 7600 3650
+$EndSCHEMATC
