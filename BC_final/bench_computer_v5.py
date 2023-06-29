@@ -499,7 +499,7 @@ class BenchComputer(Frame):
 
     if self.isTakingIntervalPhotos  == TRUE and self.intervalStillButtonPressed   == TRUE:  
       self.intervalImageCounter     += 1 
-      self.file_name_interval       = '{}/{}.jpg'.format(self.directory_interval,self.intervalImageCounter)  
+      self.file_name_interval       = '{}/000{}.jpg'.format(self.directory_interval,self.intervalImageCounter)  
       self.camera.capture(self.file_name_interval)
       self.log_textBox.insert(0.0, "Captured interval image {}\n".format(self.file_name_interval))
       image           = Image.open(self.file_name_interval)
