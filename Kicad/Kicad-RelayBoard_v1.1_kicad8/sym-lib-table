@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "BenchComputerRelayDriver-rescue")(type "Legacy")(uri "${KIPRJMOD}/BenchComputerRelayDriver-rescue.lib")(options "")(descr ""))
+  (lib (name "songle_5v_relay")(type "Legacy")(uri "${KIPRJMOD}/songle_5v_relay.lib")(options "")(descr ""))
+)
