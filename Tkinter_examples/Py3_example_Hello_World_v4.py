@@ -2,6 +2,11 @@
 # ... add a text input box ("Entry") and an change event handler.
 # Written by Peter Dalmaris, feel free to use and share
 
+# If you are having problems with the var_changed event (getting 
+# garbage collected and lost), consider the solution in 
+# this Stackoverflow discussion: 
+# https://stackoverflow.com/questions/49619685/tracing-entry-that-uses-a-stringvar-has-no-effect-on-label
+
 from tkinter import *
 
 class HelloWorld:
